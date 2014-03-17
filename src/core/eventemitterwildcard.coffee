@@ -1,6 +1,6 @@
 KDEventEmitter = require './eventemitter.coffee'
 
-module.exports = class KDEventEmitter.Wildcard extends KDEventEmitter
+module.exports = class KDEventEmitterWildcard extends KDEventEmitter
 
   wildcardKey = '*'
   listenerKey = '_listeners'
