@@ -5,6 +5,10 @@ module.exports = class ContentView extends KDView
 
     super options
 
+    @editButton = new KDButtonView
+      cssClass  : 'edit-button'
+      iconOnly  : yes
+
   getExampleTabView: ->
     exampleTabs = new KDTabView
       hideHandleCloseIcons : yes
@@ -96,7 +100,7 @@ module.exports = class ContentView extends KDView
     """
       <article>
         <section>
-          <h3>KD Framework Guidelines</h3>
+          <h3>KD Framework Guidelines {{> this.editButton }} </h3>
           <p>
           Welcome to the KD guides! This documentation will take you from
           total beginner to KD expert. It is designed to start from the basics,
