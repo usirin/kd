@@ -1,3 +1,5 @@
+SideNavigationTreeView = require './sidenavigationtreeview'
+
 module.exports = class SideNavigation extends KDView
 
   constructor : (options = {}) ->
@@ -7,9 +9,8 @@ module.exports = class SideNavigation extends KDView
 
     super options
 
-    @menu = new JTreeViewController
+    @menu = new SideNavigationTreeView
       cssClass            : 'side-menu'
-      listsCollapsible    : no
 
     ,
     [
