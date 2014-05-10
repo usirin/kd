@@ -8,7 +8,8 @@ module.exports = class SideNavigation extends KDView
     super options
 
     @menu = new JTreeViewController
-      cssClass    : 'side-menu'
+      cssClass            : 'side-menu'
+      listsCollapsible    : no
 
     ,
     [
