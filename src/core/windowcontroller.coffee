@@ -39,7 +39,6 @@ module.exports = class KDWindowController extends KDController
     @focusListeners        = []
 
     @bindEvents()
-    @setWindowProperties()
 
     super options, data
 
@@ -60,11 +59,10 @@ module.exports = class KDWindowController extends KDController
 
   bindEvents:->
 
-    $(window).bind @keyEventsToBeListened.join(' '), @bound "key"
+    for eventName in @keyEventsToBeListened
+      addEventListener eventName, @bound 'key'
 
-    $(window).bind "resize", (event)=>
-      @setWindowProperties event
-      @notifyWindowResizeListeners event
+    addEventListener 'resize', @bound 'notifyWindowResizeListeners'
 
     document.addEventListener 'scroll', do =>
       timer  = null

@@ -9,8 +9,8 @@
 /src/entry.coffee
 /playground/js
 /playground/css
-/test/kd.libs.js
-/test/kd.test.js
+/test/kd.libs.*js
+/test/kd.test.*js
 
 /docs/css/kd.css
 /docs/css/main.css
@@ -18,3 +18,5 @@
 /docs/js/kd.js
 /docs/js/kd.libs.js
 /docs/js/main.js
+
+/docs/js/kd.sitemap.js
