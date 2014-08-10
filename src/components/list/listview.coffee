@@ -9,12 +9,16 @@ module.exports = class KDListView extends KDView
     options.lastToFirst  ?= no
     options.boxed        ?= no
     options.itemsPerBox  ?= 10
-    options.cssClass      = if options.cssClass? then "kdlistview kdlistview-#{options.type} #{options.cssClass}" else "kdlistview kdlistview-#{options.type}"
+    options.cssClass      = if options.cssClass?
+    then "kdlistview kdlistview-#{options.type} #{options.cssClass}"
+    else "kdlistview kdlistview-#{options.type}"
 
     super options, data
 
     @items = []
     @boxes = []
+
+    console.log @getOptions()
 
     if @getOptions().boxed
       @on 'viewAppended', =>
