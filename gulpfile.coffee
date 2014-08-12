@@ -284,7 +284,9 @@ gulp.task 'webserver', ['compile'], ->
 
 gulp.task 'watch-test', ->
 
-  watchLogger 'cyan', gulp.watch TEST_PATH, ['coffee-test']
+  path = COFFEE_PATH.concat TEST_PATH
+
+  watchLogger 'cyan', gulp.watch path, ['coffee-test']
 
 
 gulp.task 'watch-coffee', ->

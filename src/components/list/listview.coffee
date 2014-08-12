@@ -1,5 +1,6 @@
-KDView        = require './../../core/view'
-KDListViewBox = require './listviewbox'
+KDView         = require './../../core/view'
+KDListViewBox  = require './listviewbox'
+KDListItemView = require './listitemview'
 
 module.exports = class KDListView extends KDView
 
@@ -9,6 +10,8 @@ module.exports = class KDListView extends KDView
     options.lastToFirst  ?= no
     options.boxed        ?= no
     options.itemsPerBox  ?= 10
+    options.itemClass    ?= KDListItemView
+
     options.cssClass      = if options.cssClass?
     then "kdlistview kdlistview-#{options.type} #{options.cssClass}"
     else "kdlistview kdlistview-#{options.type}"
@@ -18,24 +21,35 @@ module.exports = class KDListView extends KDView
     @items = []
     @boxes = []
 
-    console.log @getOptions()
-
     if @getOptions().boxed
       @on 'viewAppended', =>
         @parent.on 'scroll', @bound 'handleScroll'
-
-
-  empty: ->
-
-    item.destroy()  for item, i in @items when item
-
-    @items = []
 
 
   keyDown: (event) ->
 
     KD.utils.stopDOMEvent event
     @emit "KeyDownOnList", event
+
+
+  addItemView: (itemInstance, index) ->
+
+    {lastToFirst} = @getOptions()
+
+    unless index?
+      if lastToFirst
+      then @items.unshift itemInstance
+      else @items.push itemInstance
+
+      index = if lastToFirst then 0 else @items.length - 1
+    else
+
+      @items.splice index, 0, itemInstance
+
+    @emit 'ItemWasAdded', itemInstance, index
+    @insertItemAtIndex itemInstance, index
+
+    return itemInstance
 
 
   addItem: (itemData, index) ->
@@ -55,93 +69,122 @@ module.exports = class KDListView extends KDView
     itemOptions.childClass   or= itemChildClass
     itemOptions.childOptions or= itemChildOptions
 
-    itemInstance = new (@getOptions().itemClass ? KDListItemView) itemOptions, itemData
+    { itemClass } = @getOptions()
+
+    itemInstance = new itemClass itemOptions, itemData
     @addItemView itemInstance, index
 
     return itemInstance
 
 
+  removeItemView: (itemView, index) ->
+    @emit "ItemWasRemoved", itemView, index
+
+    # remove itemView from DOM
+    itemView.destroy()
+
+    # remove item from items list
+    @items.splice index, 1
+
+    return yes
+
+
+  removeItemByIndex: (index) ->
+    return no  unless @items[index]
+
+    return @removeItemView @items[index], index
+
+
+  removeItemByInstance: (itemInstance) ->
+    for item, index in @items
+      if itemInstance.getId() is item.getId()
+        return @removeItemView itemInstance, index
+
+
+  removeItemByData: (itemData) ->
+    { dataPath } = @getOptions()
+
+    return  unless itemData[dataPath]
+
+    # we need the copy of the array so that while
+    # iterating over it we can remove item from
+    # listView's instance ~Umut
+    items = @items.slice()
+    deleted = no
+    items.forEach (item, index) =>
+      match = item.getData() and
+        (item.getData()[dataPath] is itemData[dataPath])
+
+      deleted = yes  if match
+      @removeItemView @items[index], index  if match
+
+    return yes  if deleted
+
+
   removeItem: (itemInstance, itemData, index) ->
-    destroy = (item, i) =>
-      @emit 'ItemWasRemoved', item, i
-      item.destroy()
-      @items.splice i, 1
-      return yes
 
-    if index
-      return no  unless @items[index]
-      return destroy @items[index], index
-
-    {dataPath} = @getOptions()
-
-    for item, i in @items
-      if itemInstance
-        if itemInstance.getId() is @items[i].getId()
-          return destroy @items[i], i
-      else if itemData
-        if itemData[dataPath] and @items[i].getData()[dataPath] and itemData[dataPath] is @items[i].getData()[dataPath]
-          return destroy @items[i], i
+    return @removeItemByIndex index            if index
+    return @removeItemByInstance itemInstance  if itemInstance
+    return @removeItemByData itemData          if itemData
 
 
-  removeItemByData: (itemData) -> @removeItem null, itemData
-
-
-  removeItemByIndex: (index) -> @removeItem null, null, index
+  empty: ->
+    @items.forEach (item) -> item.destroy()
+    @items = []
 
 
   destroy: ->
-
     item.destroy() for item in @items
-
     super
 
 
-  addItemView: (itemInstance, index) ->
-
-    {lastToFirst} = @getOptions()
-
-    unless index?
-      if lastToFirst
-      then @items.unshift itemInstance
-      else @items.push itemInstance
-
-      index = if lastToFirst then 0 else @items.length - 1
-    else
-
-      @items.splice index, 0, itemInstance
-
-
-    @emit 'ItemWasAdded', itemInstance, index
-    @insertItemAtIndex itemInstance, index
-
-    return itemInstance
-
-
   appendItem: (itemInstance) -> @insertItemAtIndex itemInstance
+
+  getIndex: (index) ->
+    { boxed, lastToFirst } = @getOptions()
+    if index <= 0
+      return if boxed and lastToFirst
+      then undefined
+      else 0
+
+    if index >= @items.length - 1
+      return  if boxed and not lastToFirst
+      then undefined
+      else @items.length - 1
+
+    return index
+
+
+  insertView: (itemInstance, index) ->
+    item = itemInstance.getElement()
+    neighborItem = @items[index + 1].getElement()
+    neighborItem.parentNode.insertBefore item, neighborItem
+    itemInstance.emit 'viewAppended'  if @parentIsInDom
+
+
+  appendView: (itemInstance) -> @addSubView itemInstance, null
+
+
+  putView: (itemInstance, index) ->
+
+    shouldBeLastItem = index >= @items.length - 1
+
+    if shouldBeLastItem
+    then @appendView itemInstance
+    else @insertView itemInstance, index
 
 
   insertItemAtIndex: (itemInstance, index) ->
 
     {boxed, lastToFirst} = @getOptions()
 
-    if index <= 0
-      index = if boxed and lastToFirst then undefined else 0
+    index = @getIndex index
 
-    if index >= @items.length - 1
-      index = if boxed and not lastToFirst then undefined else @items.length - 1
+    packagable = boxed and not index?
 
-    if boxed and not index?
-      @packageItem itemInstance
-    else
-      shouldBeLastItem = index >= @items.length - 1
-      item             = itemInstance.getElement()
-
-      unless shouldBeLastItem
-        neighborItem = @items[index + 1].getElement()
-        neighborItem.parentNode.insertBefore item, neighborItem
-        itemInstance.emit 'viewAppended'  if @parentIsInDom
-      else
-        @addSubView itemInstance, null
+    if packagable
+    then @packageItem itemInstance
+    else @putView itemInstance, index
 
     @scrollDown()  if @doIHaveToScroll()
 
