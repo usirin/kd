@@ -124,7 +124,6 @@ module.exports = class KDView extends KDObject
     @bindEvents()
 
     @on 'childAppended', @childAppended.bind this
-
     @on 'viewAppended', =>
       @setViewReady()
       @viewAppended()
@@ -184,9 +183,11 @@ module.exports = class KDView extends KDObject
     @data?.on? 'update', @bound 'render'
     @render()  if @parentIsInDom
 
+  # gone
   setDataId:->
     @domElement.data "data-id",@getId()
 
+  # RVIEW
   getAttribute:(attr)->
     @getElement().getAttribute attr
 
@@ -202,7 +203,7 @@ module.exports = class KDView extends KDObject
       while ancestor.parentNode
         ancestor = ancestor.parentNode
       ancestor
-    -> findUltimateAncestor(@$()[0]).body?
+    -> (findUltimateAncestor @getElement()).body?
 
 # #
 # TRAVERSE DOM ELEMENT
@@ -212,7 +213,7 @@ module.exports = class KDView extends KDObject
 
   getElement:-> @getDomElement()[0]
 
-  getTagName:-> @options.tagName || 'div'
+  getTagName: -> @getElement().nodeName.toLowerCase()
 
   # shortcut method for @getDomElement()
   $:(selector)->
@@ -339,6 +340,7 @@ module.exports = class KDView extends KDObject
     # @$().show duration
     #@getDomElement()[0].style.display = "block"
 
+  #gone
   setPosition:->
     positionOptions = @getOptions().position
     positionOptions.position = "absolute"
@@ -511,7 +513,7 @@ module.exports = class KDView extends KDObject
     @on 'scroll', do ->
       lastRatio = 0
       (event)->
-        el = view.$()[0]
+        el = view.getElement()
         {scrollHeight, scrollTop} = el
 
         dynamicThreshold = if threshold > 1
@@ -815,15 +817,14 @@ module.exports = class KDView extends KDObject
     # bubbling childAppended event
     @parent?.emit 'childAppended', child
 
-  setViewReady:->
-    @viewIsReady = yes
+  setViewReady:-> @viewIsReady = yes
 
-  isViewReady:->
-    @viewIsReady or no
+  isViewReady:-> @viewIsReady or no
 
 # #
 # HELPER METHODS
 # #
+
 
   observeMutations: ->
 
@@ -887,7 +888,7 @@ module.exports = class KDView extends KDObject
 
     @unsetTooltip()
     KDTooltip = require './../components/tooltip/tooltip.coffee'
-    @tooltip  = new KDTooltip o, {}
+    @tooltip  = new KDTooltip o, {} # override KDTooltip::setTooltip
 
   getTooltip:-> @tooltip
 

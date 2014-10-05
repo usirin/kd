@@ -7,15 +7,17 @@ module.exports = class KDObject extends KDEventEmitter
 
   utils: KD.utils
 
-  constructor:(options = {}, data)->
+  constructor: (options = {}, data) ->
+
+    super options
 
     @id or= options.id or KD.utils.getUniqueId()
+
     @setOptions options
     @setData data  if data
     @setDelegate options.delegate if options.delegate
     @registerKDObjectInstance()
 
-    super
 
     if options.testPath
       KD.registerInstanceForTesting this
@@ -27,8 +29,9 @@ module.exports = class KDObject extends KDEventEmitter
     unless 'function' is typeof @[method]
       throw new Error "bound: unknown method! #{method}"
     boundMethod = "__bound__#{method}"
+
     boundMethod of this or Object.defineProperty(
-      this, boundMethod, value: @[method].bind this
+      this, boundMethod, value: this[method].bind this
     )
     return @[boundMethod]
 
@@ -49,40 +52,46 @@ module.exports = class KDObject extends KDEventEmitter
     else if @readyState is READY then @utils.defer listener
     else @once 'ready', listener
 
-  registerSingleton:KD.registerSingleton
+  registerSingleton: (args...) ->
+    warn 'KDObject::registerSingleton is deprecated.'
+    return KD.registerSingleton args...
 
-  getSingleton:KD.getSingleton
+  getSingleton: (args...) ->
+    warn 'KDObject::getSingleton is deprecated.'
+    KD.getSingleton args...
 
-  getInstance:(instanceId)->
+  getInstance: (instanceId) ->
     KD.getAllKDInstances()[instanceId] ? null
 
-  registerKDObjectInstance: -> KD.registerInstance @
+  registerKDObjectInstance: -> KD.registerInstance this
 
-  setData:(@data)->
+  setData: (data) -> @data = data
 
-  getData:-> @data
+  getData: -> @data
 
-  setOptions:(@options = {})->
+  setOptions: (options = {}) -> @options = options
 
-  setOption:(option, value)-> @options[option] = value
+  getOptions: -> @options
 
-  unsetOption:(option)-> delete @options[option] if @options[option]
+  setOption: (option, value) -> @options[option] = value
 
-  getOptions:-> @options
-  getOption:(key)-> @options[key] ? null
+  getOption: (key) -> @options[key] ? null
 
-  changeId:(id)->
+  unsetOption: (option) -> delete @options[option] if @options[option]
+
+  changeId: (id) ->
     KD.deleteInstance id
     @id = id
-    KD.registerInstance @
+    KD.registerInstance this
 
-  getId:->@id
+  getId: -> @id
 
-  setDelegate:(@delegate)->
+  setDelegate: (@delegate) -> @delegate = delegate
 
-  getDelegate:->@delegate
+  getDelegate: -> @delegate
 
   destroy:->
+
     @isDestroyed = yes
     @emit 'KDObjectWillBeDestroyed'
     KD.deleteInstance @id
@@ -93,3 +102,5 @@ module.exports = class KDObject extends KDEventEmitter
     options.chain
     options.newLink
     "#{options.chain}.#{options.newLink}"
+
+

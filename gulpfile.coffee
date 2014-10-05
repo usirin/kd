@@ -270,7 +270,7 @@ gulp.task 'webserver', ['compile'], ->
     res.header 'Location', redirectTo
     res.send 301
 
-  app.listen 3000
+  app.listen 9999
 
   log 'green', "HTTP server for #{buildDir} is ready at localhost:3000"
   return

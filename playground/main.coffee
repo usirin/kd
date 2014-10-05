@@ -1,48 +1,75 @@
 
-class ListItem extends KDListItemView
+view = new RView
+view.appendToDomBody()
 
-  partial : ->
+lastView = view
+# mainView = new KDCustomHTMLView
+#   partial: 'KD'
+#   mouseover: -> console.log 'asfasfas'
+#   bind: 'mouseover'
 
-    @setCss 'padding-left' : '50px'
+# mainView.appendToDomBody()
 
-    {randomIndex, id} = @getData()
-    "I'm the number #{id} and my index: #{randomIndex or 'N/A'}!!<br><br>"
+start = ({ results }) ->
+  console.time 'RView render'
+  results.forEach (result) ->
+    lastView.addSubview a = new RView
+      cssClass : 'falan'
+      partial  : "#{result.user.email}"
+      bind     : 'mouseover'
+      mouseover: -> console.log 'mouseover'
+      click : -> console.log 'asd'
+    lastView = a
+  view.render()
+  console.timeEnd 'RView render'
 
-
-mainView = new KDView
-KDView.appendToDOMBody mainView
-
-listController = new KDListViewController
-  itemClass : ListItem
-  # boxed : yes
-  lastToFirst : yes
-
-
-id = 0
-mainView.addSubView input = new KDInputView
-
-mainView.addSubView new KDButtonView
-  title    : 'Add random indexed item'
-  callback : ->
-    randomIndex = parseInt(input.getValue(), 10) or 0
-    listController.addItem {title : Date.now(), id : ++id, randomIndex}, randomIndex
-    log listController.getListView().items.map (item) -> item.data.id
-    log listController.itemsOrdered.map (item) -> item.data.id
-
-
-mainView.addSubView listController.getView()
-
-# KD.utils.defer ->
-
-#   for i in [0...10]
-#     if listController.itemsOrdered.length > 3
-#       randomIndex = KD.utils.getRandomNumber listController.itemsOrdered.length
-#     # randomIndex = 0
-#     log randomIndex
-#     listController.addItem {title : Date.now(), id : ++id, randomIndex}, randomIndex
-#     # log listController.itemsOrdered.map (item) -> item.data.id
+$.ajax
+  url         : "http://api.randomuser.me/?results=40"
+  type        : 'GET'
+  success     : (obj) ->
+    obj.results = obj.results.concat obj.results for i in [0...3]
+    start obj
+    # startKD obj
+    KD.utils.defer -> window.scrollTo 0, document.body.scrollHeight
+    console.log obj.results.length
 
 
-# listController.getListItems()
+# lastView = mainView
+# startKD = ({ results }) ->
+#   console.time 'KDView render'
+#   console.log {results}
+#   for result in results
+#     lastView.addSubView lastView = new KDCustomHTMLView
+#       cssClass : 'falan'
+#       partial  : "#{result.user.email}"
+#       bind     : 'mouseover mouseout'
 
-window.kamil = listController
+#   console.timeEnd 'KDView render'
+
+
+
+
+# mainView = new KDView
+#   partial: 'KD'
+#   mouseover: -> console.log 'asfasfas'
+#   bind: 'mouseover'
+
+# mainView.appendToDomBody()
+
+# id = 0
+
+# lastMainView = mainView
+# console.time 'KDView render'
+# for i in [0...700]
+
+#   lastMainView.addSubView a = new KDView
+#     cssClass : 'falan'
+#     partial : Date.now() + " #{i}"
+
+#   lastMainView = a
+
+# lastMainView.addSubView a = new KDView
+#   partial: 'yo!'
+#   click: -> console.log 'yo!'
+
+# console.timeEnd 'KDView render'

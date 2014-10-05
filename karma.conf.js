@@ -26,36 +26,6 @@ module.exports = function(config) {
       testName: 'KD tests'
     },
 
-    // define SauceLabs browsers
-    customLaunchers: {
-
-      sl_firefox_windows: {
-        base: 'SauceLabs',
-        browserName: 'firefox',
-        platform: 'Windows 7'
-      },
-
-      sl_chrome_windows: {
-        base: 'SauceLabs',
-        browserName: 'chrome',
-        platform: 'Windows 7'
-      },
-
-      sl_ie_9: {
-        base: 'SauceLabs',
-        browserName: 'internet explorer',
-        platform: 'Windows 7',
-        version: '9'
-      },
-
-      sl_ie_10: {
-        base: 'SauceLabs',
-        browserName: 'internet explorer',
-        platform: 'Windows 7',
-        version: '10'
-      }
-    },
-
     // list of files to exclude
     exclude: [
 
@@ -72,7 +42,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['dots'],
 
 
     // web server port

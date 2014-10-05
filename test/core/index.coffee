@@ -13,3 +13,5 @@ describe 'Core', ->
   require './view.test'
   require './customhtmlview.test'
 
+  require './rview.test'
+

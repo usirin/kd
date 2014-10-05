@@ -38,11 +38,18 @@
     "browserify": "^5.11.1",
     "jquery-mousewheel": "^3.1.12",
     "findit": "^2.0.0",
-    "bluebird": "^2.3.2"
+    "bluebird": "^2.3.2",
+    "dom-delegator": "^9.2.0",
+    "value-event": "^2.3.0",
+    "virtual-dom": "0.0.20",
+    "virtual-hyperscript": "^4.5.0",
+    "vtree": "0.0.20"
   },
   "devDependencies": {
+    "bluebird": "^2.3.2",
     "chai": "^1.9.1",
     "express": "^4.9.0",
+    "global": "^4.2.1",
     "gulp-karma": "0.0.4",
     "gulp-livereload": "^2.1.1",
     "gulp-markdox": "^0.1.0",
@@ -51,6 +58,7 @@
     "karma-mocha": "^0.1.9",
     "karma-sauce-launcher": "^0.2.10",
     "mocha": "^1.21.4",
-    "sinon": "^1.10.3"
+    "sinon": "^1.10.3",
+    "synthetic-dom-events": "git://github.com/Raynos/synthetic-dom-events"
   }
 }

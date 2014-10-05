@@ -36,7 +36,7 @@ window.KD = $.extend (window.KD), do ->
   lastFuncCall    : null
   instancesToBeTested: {}
 
-  registerInstance : (anInstance)->
+  registerInstance: (anInstance)->
     warn "Instance being overwritten!!", anInstance  if @instances[anInstance.id]
     @instances[anInstance.id] = anInstance
 
@@ -77,7 +77,7 @@ window.KD = $.extend (window.KD), do ->
       warn "\"#{singletonName}\" singleton doesn't exist!"
       null
 
-  getAllKDInstances  :-> KD.instances
+  getAllKDInstances: -> KD.instances
 
   exportKDFramework:->
     (window[item] = KD.classes[item] for own item of KD.classes)
