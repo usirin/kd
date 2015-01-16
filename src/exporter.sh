@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "require './lib.includes.coffee'"
 echo "utils      = require './core/utils.coffee'"
 
 echo "KD         = require './core/kd.coffee'"
