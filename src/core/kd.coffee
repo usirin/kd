@@ -1,3 +1,7 @@
+`document.write = document.writeln = function () {
+    throw new Error('document.[write|writeln] is nisht-nisht');
+};`
+
 utils = window.utils = require './utils.coffee'
 require './support'
 
