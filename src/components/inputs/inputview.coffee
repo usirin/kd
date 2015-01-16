@@ -1,5 +1,6 @@
 KDView           = require './../../core/view.coffee'
 KDInputValidator = require './inputvalidator.coffee'
+Encoder          = require 'htmlencode'
 
 ###*
  * The base input field view. Similar to the classic `<input type="foo">`

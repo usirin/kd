@@ -1,5 +1,6 @@
 KDView             = require './../../core/view.coffee'
 KDNotificationView = require './../notifications/notificationview.coffee'
+Encoder            = require 'htmlencode'
 
 module.exports = class KDContentEditableView extends KDView
 

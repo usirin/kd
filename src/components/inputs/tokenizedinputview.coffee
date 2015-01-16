@@ -1,5 +1,6 @@
 KDContentEditableView = require './contenteditableview.coffee'
 KDContextMenu         = require './../contextmenu/contextmenu.coffee'
+Encoder               = require 'htmlencode'
 
 module.exports = class KDTokenizedInput extends KDContentEditableView
 

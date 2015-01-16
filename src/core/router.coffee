@@ -1,5 +1,6 @@
 KDObject           = require './object.coffee'
 KDNotificationView = require './../components/notifications/notificationview.coffee'
+Encoder            = require 'htmlencode'
 
 module.exports = class KDRouter extends KDObject
 

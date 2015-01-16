@@ -13,7 +13,8 @@
 
 ###
 
-KDView = require './../../core/view.coffee'
+KDView  = require './../../core/view.coffee'
+Encoder = require 'htmlencode'
 
 module.exports = class KDTooltip extends KDView
 
