@@ -1,6 +1,6 @@
-require './../../../libs/mousetrap.js'
-require './../../../libs/mousetrap-global-bind.js'
-require './../../../libs/mousetrap-record.js'
+require 'mousetrap'
+require 'mousetrap-global-bind'
+require 'mousetrap-record'
 
 module.exports = class KDKeyboardListener
 
