@@ -67,6 +67,8 @@
     "htmlencode": "kd-shim-htmlencode",
     "inflector": "kd-shim-inflector",
     "jspath": "kd-shim-jspath",
-    "mutation-summary": "kd-shim-mutation-summary"
+    "mutation-summary": "kd-shim-mutation-summary",
+    "mousetrap-global-bind": "mousetrap/plugins/global-bind/mousetrap-global-bind.js",
+    "mousetrap-record": "mousetrap/plugins/record/mousetrap-record.js"
   }
 }
