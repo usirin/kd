@@ -44,6 +44,7 @@
     "kd-shim-jspath": "^0.1.0",
     "kd-shim-mutation-summary": "^0.1.0",
     "minimist": "1.1.0",
+    "mousetrap": "^1.4.6",
     "vinyl-source-stream": "^1.0.0"
   },
   "devDependencies": {
