@@ -1,5 +1,6 @@
 KDView           = require './../../core/view.coffee'
 KDCustomHTMLView = require './../../core/customhtmlview.coffee'
+_throttle        = require 'lodash.throttle'
 
 module.exports = class KDDiaScene extends KDView
 
@@ -276,7 +277,7 @@ module.exports = class KDDiaScene extends KDView
 
   parentDidResize:->
     super
-    do _.throttle => @updateScene()
+    do _throttle => @updateScene()
 
   getSceneSize:-> width: @getWidth(), height: @getHeight()
 
