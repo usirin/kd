@@ -20,9 +20,7 @@ exec       = Promise.promisify (require 'child_process').exec
 ENTRY_PATH    = argv.entryPath ? './src/entry.coffee'
 STYLES_PATH   = require './src/themes/styl.includes.coffee'
 COFFEE_PATH   = ['./src/components/**/*.coffee','./src/core/**/*.coffee','./src/init.coffee']
-LIBS_PATH     = ['./libs/*.js']
 TEST_PATH     = ['./test/**/*.test.coffee']
-LIBS          = require './src/lib.includes.coffee'
 
 # Helpers
 
@@ -75,17 +73,6 @@ gulp.task 'styles', ['clean'], ->
     .pipe rename "kd.#{version}css"
     .pipe gulp.dest "#{buildDir}/css"
 
-
-gulp.task 'libs', ['clean'], ->
-
-  gulp.src LIBS
-    # INVESTIGATE: this somehow breaks jQuery - SY
-    # .pipe gulpif useUglify, uglify()
-    .pipe uglify()
-    .pipe concat 'tmp'
-    .pipe rename "kd.libs.#{version}js"
-    .pipe gulp.dest 'test'
-    .pipe gulp.dest "#{buildDir}/js"
 
 gulp.task 'export', ->
 
@@ -222,7 +209,6 @@ gulp.task 'coffee-test', ->
 
 
 testFiles = [
-  './test/kd.libs.js'
   './test/kd.test.js'
 ]
 
@@ -290,11 +276,6 @@ gulp.task 'watch-coffee', ->
   watchLogger 'yellow', gulp.watch COFFEE_PATH, ['coffee']
 
 
-gulp.task 'watch-libs', ->
-
-  watchLogger 'yellow', gulp.watch LIBS_PATH, ['libs']
-
-
 gulp.task 'watch-styles', ->
 
   watchLogger 'yellow', gulp.watch STYLES_PATH, ['styles']
@@ -349,9 +330,9 @@ gulp.task 'markdox', ->
 
 # Aggregate Tasks
 
-gulp.task 'compile', ['styles', 'libs', 'coffee']
+gulp.task 'compile', ['styles', 'coffee']
 
-defaultTasks = ['compile', 'watch-styles', 'watch-coffee', 'watch-libs']
+defaultTasks = ['compile', 'watch-styles', 'watch-coffee']
 
 if buildDocs
   buildDir     = 'docs'
