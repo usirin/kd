@@ -1,4 +1,3 @@
-window.MutationSummary    = require './../../../libs/mutation-summary.js'
 KDCustomHTMLView          = require './../../core/customhtmlview'
 KDScrollTrack             = require './scrolltrack'
 KDCustomScrollViewWrapper = require './customscrollviewinner'

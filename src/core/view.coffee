@@ -1,4 +1,5 @@
-KDObject      = require './object.coffee'
+KDObject        = require './object.coffee'
+MutationSummary = require 'mutation-summary'
 
 module.exports = class KDView extends KDObject
 
