@@ -1,4 +1,4 @@
-{JsPath}                   = require './../../../libs/jspath.js'
+{JsPath}                   = require 'jspath'
 Inflector                  = require 'inflector'
 KDViewController           = require './../../core/viewcontroller.coffee'
 KDListViewController       = require './../list/listviewcontroller.coffee'
