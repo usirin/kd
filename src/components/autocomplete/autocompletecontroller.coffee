@@ -1,5 +1,5 @@
 {JsPath}                   = require './../../../libs/jspath.js'
-Inflector                  = require './../../../libs/inflector.js'
+Inflector                  = require 'inflector'
 KDViewController           = require './../../core/viewcontroller.coffee'
 KDListViewController       = require './../list/listviewcontroller.coffee'
 KDLabelView                = require './../inputs/labelview.coffee'

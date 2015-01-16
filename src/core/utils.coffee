@@ -1,4 +1,4 @@
-Inflector = require './../../libs/inflector.js'
+Inflector = require 'inflector'
 
 module.exports =
 
