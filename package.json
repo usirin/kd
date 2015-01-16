@@ -61,5 +61,12 @@
     "karma-sauce-launcher": "^0.2.10",
     "mocha": "^2.0.1",
     "sinon": "^1.12.1"
+  },
+  "browser": {
+    "canvas-loader": "kd-shim-canvas-loader",
+    "htmlencode": "kd-shim-htmlencode",
+    "inflector": "kd-shim-inflector",
+    "jspath": "kd-shim-jspath",
+    "mutation-summary": "kd-shim-mutation-summary"
   }
 }
